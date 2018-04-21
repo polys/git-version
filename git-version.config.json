@@ -1,0 +1,15 @@
+[
+  {
+    "id": "app",
+    "name": "Test App",
+    "path": ".",
+    "versionTagPrefix": "v[0-9]*",
+    "version": "0.1"
+  },
+  {
+    "id": "dummy",
+    "name": "Dummy Component",
+    "path": ".",
+    "versionTagPrefix": "v[0-9]*"
+  }
+]

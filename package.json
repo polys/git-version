@@ -1,0 +1,21 @@
+{
+  "name": "git-version",
+  "version": "0.1.0",
+  "author": "Polys Georgiou",
+  "license": "MIT",
+  "private": true,
+  "main": "version.js",
+  "scripts": {
+    "start": "node version.js",
+    "debug": "nodemon version.js"
+  },
+  "engines": {
+    "node": ">= 7.9.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.11.0",
+    "nodemon": "^1.17.3"
+  }
+}
