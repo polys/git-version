@@ -1,7 +1,5 @@
 # get-git-version
 
-[![npm version](https://badge.fury.io/js/get-git-version.svg)](https://badge.fury.io/js/get-git-version)
-
 Gets Git version and commit information for one or more repositories. This is useful for applications that span multiple repositories or use submodules.
 
 ## Prerequisites
