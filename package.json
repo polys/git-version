@@ -1,9 +1,13 @@
 {
-  "name": "git-version",
-  "version": "0.1.0",
+  "name": "get-git-version",
+  "version": "0.0.1",
   "author": "Polys Georgiou",
   "license": "MIT",
-  "private": true,
+  "homepage": "https://github.com/polys/git-version",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/polys/git-version.git"
+  },
   "main": "version.js",
   "scripts": {
     "start": "node version.js",
