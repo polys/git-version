@@ -2,14 +2,31 @@ const path = require('path');
 const fs = require('fs');
 const { exec } = require('child_process');
 
-const configFilePath = './git-version.config.json';
-const config = fs.existsSync(configFilePath)
-  ? JSON.parse(fs.readFileSync(configFilePath, 'utf8'))
-  : [];
+const appId = 'app';
 
-const workingDirPath = process.argv.length > 2 ? process.argv[2] : '.';
+const workingDirPath = process.argv.length > 2 ? process.argv[2] : process.cwd();
 if (!fs.existsSync(workingDirPath) || !fs.lstatSync(workingDirPath).isDirectory()) {
   console.error(`Invalid directory ${workingDirPath}`);
+  process.exit(1);
+}
+
+const getDefaultApp = () => {
+  const packageJsonFilePath = path.join(workingDirPath, 'package.json');
+  if (fs.existsSync(packageJsonFilePath)) {
+    const package = JSON.parse(fs.readFileSync(packageJsonFilePath, 'utf8'));
+    return { id: appId, name: package.name, version: package.version };
+  }
+  return { id: appId, name: path.basename(workingDirPath) };
+};
+
+const configFilePath = path.join(workingDirPath, 'git-version.config.json');
+const config = fs.existsSync(configFilePath)
+  ? JSON.parse(fs.readFileSync(configFilePath, 'utf8'))
+  : [getDefaultApp()];
+
+const appConfig = config.find(c => c.id === appId);
+if (!appConfig) {
+  console.error(`Expected an item with id '${appId}' in '${configFilePath}'`);
   process.exit(1);
 }
 
@@ -55,25 +72,14 @@ Promise.all(config.map(async item => (
     ...await getGitInfo(path.join(workingDirPath, item.path || '.'), item.versionTagPrefix),
   }
 ))).then((versions) => {
-  const appId = 'app';
   const app = versions.find(c => c.id === appId);
-  if (!app) {
-    console.error(`Expected an item with id '${appId}' in '${configFilePath}'`);
-    process.exit(1);
-  }
-
-  let appVersion = app.version;
-  if (!appVersion || appVersion.length < 1) {
-    const appConfig = config.find(c => c.id === appId);
-    appVersion = appConfig.version;
-  }
-
   const components = versions.filter(c => c.id !== appId);
 
   const version = {
     name: app.name,
-    version: appVersion,
-    components,
+    version: app.version || appConfig.version,
+    git: app.git,
+    components
   };
 
   const json = JSON.stringify(version, null, 2);
