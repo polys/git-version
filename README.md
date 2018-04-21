@@ -17,9 +17,12 @@ The script simply runs shell commands similar to:
 ## Usage
 
 To get information about the current directory, run:
+
 ```
-node version.js
+get-git-version
 ```
+
+or `node version.js` or `npm start` or `yarn start`
 
 If the working directory contains a `package.json` file, it will be used to set the `name` and default `version`.
 
