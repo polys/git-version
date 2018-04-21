@@ -1,36 +1,45 @@
 const path = require('path');
 const fs = require('fs');
 const { exec } = require('child_process');
+const commander = require('commander');
 
-const appId = 'app';
+commander
+  .option('-w, --working-dir [path]', 'set working directory', process.cwd())
+  .option('-o, --out-file [path]', 'write output to file instead of stdout')
+  .option('-c, --config-file [path]', 'set config file', '.git-version.config.json')
+  .option('--app-id [id]', 'specify app id in config file', 'app')
+  .option('--no-pretty', 'do not pretty print output JSON')
+  .parse(process.argv);
 
-const workingDirPath = process.argv.length > 2 ? process.argv[2] : process.cwd();
-if (!fs.existsSync(workingDirPath) || !fs.lstatSync(workingDirPath).isDirectory()) {
-  console.error(`Invalid directory ${workingDirPath}`);
+const { workingDir, outFile, configFile, appId, pretty } = commander;
+
+if (!workingDir || !fs.existsSync(workingDir) || !fs.lstatSync(workingDir).isDirectory()) {
+  console.error(`Invalid working directory '${workingDir || ''}'`);
   process.exit(1);
 }
 
 const getDefaultApp = () => {
-  const packageJsonFilePath = path.join(workingDirPath, 'package.json');
+  const packageJsonFilePath = path.join(workingDir, 'package.json');
   if (fs.existsSync(packageJsonFilePath)) {
     const package = JSON.parse(fs.readFileSync(packageJsonFilePath, 'utf8'));
     return { id: appId, name: package.name, version: package.version };
   }
-  return { id: appId, name: path.basename(workingDirPath) };
+  return { id: appId, name: path.basename(workingDir) };
 };
 
-const configFilePath = path.join(workingDirPath, 'git-version.config.json');
+const configFilePath = path.join(workingDir, configFile);
 const config = fs.existsSync(configFilePath)
   ? JSON.parse(fs.readFileSync(configFilePath, 'utf8'))
   : [getDefaultApp()];
+
+
+const outFilePath = outFile ? path.join(workingDir, outFile) : null;
 
 const appConfig = config.find(c => c.id === appId);
 if (!appConfig) {
   console.error(`Expected an item with id '${appId}' in '${configFilePath}'`);
   process.exit(1);
 }
-
-const outFilePath = process.argv.length > 3 ? process.argv[3] : null;
 
 const execGetOutput = async (command, cwd) => new Promise(resolve =>
   exec(command, { cwd }, (error, stdout) => {
@@ -69,7 +78,7 @@ Promise.all(config.map(async item => (
   {
     id: item.id,
     name: item.name,
-    ...await getGitInfo(path.join(workingDirPath, item.path || '.'), item.versionTagPrefix),
+    ...await getGitInfo(path.join(workingDir, item.path || '.'), item.versionTagPrefix),
   }
 ))).then((versions) => {
   const app = versions.find(c => c.id === appId);
@@ -82,7 +91,7 @@ Promise.all(config.map(async item => (
     components
   };
 
-  const json = JSON.stringify(version, null, 2);
+  const json = JSON.stringify(version, undefined, pretty ? 2 : 0);
 
   if (outFilePath) {
     fs.writeFile(outFilePath, json, (err) => {
