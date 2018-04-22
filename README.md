@@ -1,5 +1,8 @@
 # get-git-version
 
+[![npm](https://img.shields.io/npm/v/get-git-version.svg)](https://www.npmjs.com/package/get-git-version)
+![node](https://img.shields.io/node/v/get-git-version.svg)
+
 Gets Git version and commit information for one or more repositories. This is useful for applications that span multiple repositories or use submodules.
 
 ## Prerequisites
@@ -14,6 +17,12 @@ The script simply runs shell commands similar to:
   - clean: `git diff-index --quiet HEAD --`
   - version: `git describe --tags --match "v[0-9]*" HEAD`
 
+## Install
+
+```
+npm install -g get-git-version
+```
+
 ## Usage
 
 To get information about the current directory, run:
@@ -21,8 +30,6 @@ To get information about the current directory, run:
 ```
 get-git-version
 ```
-
-or `node version.js` or `npm start` or `yarn start`
 
 If the working directory contains a `package.json` file, it will be used to set the `name` and default `version`.
 
