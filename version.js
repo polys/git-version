@@ -7,13 +7,14 @@ const commander = require('commander');
 
 commander
   .option('-w, --working-dir [path]', 'set working directory', process.cwd())
-  .option('-o, --out-file [path]', 'write output to file instead of stdout')
-  .option('-c, --config-file [path]', 'set config file', '.git-version.config.json')
-  .option('--app-id [id]', 'specify app id in config file', 'app')
-  .option('--no-pretty', 'do not pretty print output JSON')
+  .option('-o, --out-file [path]', 'write output to a file instead of stdout')
+  .option('-c, --config-file [path]', 'override default config file name', '.git-version.config.json')
+  .option('--app-id [id]', 'override default application id', 'app')
+  .option('--version-tag-prefix [prefix]', 'override default version tag prefix', 'v[0-9]*')
+  .option('--no-pretty', 'disable pretty printing the output JSON')
   .parse(process.argv);
 
-const { workingDir, outFile, configFile, appId, pretty } = commander;
+const { workingDir, outFile, configFile, appId, versionTagPrefix, pretty } = commander;
 
 if (!workingDir || !fs.existsSync(workingDir) || !fs.lstatSync(workingDir).isDirectory()) {
   console.error(`Invalid working directory '${workingDir || ''}'`);
@@ -24,9 +25,18 @@ const getDefaultApp = () => {
   const packageJsonFilePath = path.join(workingDir, 'package.json');
   if (fs.existsSync(packageJsonFilePath)) {
     const package = JSON.parse(fs.readFileSync(packageJsonFilePath, 'utf8'));
-    return { id: appId, name: package.name, version: package.version };
+    return {
+      id: appId,
+      name: package.name,
+      version: package.version,
+      versionTagPrefix
+    };
   }
-  return { id: appId, name: path.basename(workingDir) };
+  return {
+    id: appId,
+    name: path.basename(workingDir),
+    versionTagPrefix
+  };
 };
 
 const configFilePath = path.join(workingDir, configFile);

@@ -58,6 +58,7 @@ Otherwise, the name of the current folder is used as the `name` and `version` is
 * `-o [path]` or `--out-file [path]` writes the output to a file instead of `stdout`
 * `-c [path]` or `--config-file [path]` overrides the config file name (defaults to `.git-version.config.json`)
 * `--app-id [id]` overrides the application `id` (defaults to `app`)
+* `--version-tag-prefix [prefix]` overrides the default version tag prefix (defaults to `v[0-9]*`)
 * `--no-pretty` disables pretty printing the output JSON
 * `-h` or `--help` outputs usage information
 
@@ -91,4 +92,4 @@ If `path` is specified, it's joined to the working directory path; otherwise, de
 
 An item whose `id` is `app` (can be overridden using the `--app-id` command-line option) is required and treated as the main application. All other items are considered components of that application.
 
-If `versionTagPrefix` is specified, a `version` is computed for the component, based on the most recent git tag that starts with this prefix. If not specified, or a matching tag is not found, no `version` is computed.
+If `versionTagPrefix` is specified, a `version` is computed for the component, based on the most recent git tag that starts with this prefix. If no matching tag is not found, `version` won't be defined.
