@@ -13,7 +13,7 @@ The script simply runs shell commands similar to:
   - repository: `git config --get remote.origin.url`
   - branch: `git rev-parse --abbrev-ref HEAD`
   - sha1: `git rev-parse HEAD`
-  - date: `git --no-pager log --pretty=format:"%aI" -n1`
+  - date: `git --no-pager log --pretty=format:"%at" -n1`
   - clean: `git diff-index --quiet HEAD --`
   - version: `git describe --tags --match "v[0-9]*" HEAD`
 

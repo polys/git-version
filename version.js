@@ -57,7 +57,7 @@ async function getGitInfo(dirPath, versionTagPrefix) {
   const repository = await execGetOutput('git config --get remote.origin.url', dirPath);
   const branch = await execGetOutput('git rev-parse --abbrev-ref HEAD', dirPath);
   const sha1 = await execGetOutput('git rev-parse HEAD', dirPath);
-  const date = await execGetOutput('git --no-pager log --pretty=format:"%aI" -n1', dirPath);
+  const dateUnix = await execGetOutput('git --no-pager log --pretty=format:"%at" -n1', dirPath);
   const diffExitCode = await execGetExitCode('git diff-index --quiet HEAD --', dirPath);
 
   const version = versionTagPrefix && versionTagPrefix.length > 0
@@ -70,7 +70,7 @@ async function getGitInfo(dirPath, versionTagPrefix) {
       repository,
       branch,
       sha1,
-      date,
+      date: dateUnix ? new Date(1000 * dateUnix) : undefined,
       clean: (diffExitCode === 0)
     }
   };
