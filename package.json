@@ -1,6 +1,6 @@
 {
   "name": "get-git-version",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "author": "Polys Georgiou",
   "license": "MIT",
   "homepage": "https://github.com/polys/git-version",
@@ -27,5 +27,14 @@
   },
   "dependencies": {
     "commander": "^2.15.1"
-  }
+  },
+  "description": "Gets Git version and commit information for one or more repositories.",
+  "keywords": [
+    "version",
+    "git",
+    "repository",
+    "branch",
+    "commit",
+    "sha"
+  ]
 }
