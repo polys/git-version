@@ -14,7 +14,14 @@ commander
   .option('--no-pretty', 'disable pretty printing the output JSON')
   .parse(process.argv);
 
-const { workingDir, outFile, configFile, appId, versionTagPrefix, pretty } = commander;
+const {
+  workingDir,
+  outFile,
+  configFile,
+  appId,
+  versionTagPrefix,
+  pretty
+} = commander;
 
 if (!workingDir || !fs.existsSync(workingDir) || !fs.lstatSync(workingDir).isDirectory()) {
   console.error(`Invalid working directory '${workingDir || ''}'`);
@@ -24,11 +31,11 @@ if (!workingDir || !fs.existsSync(workingDir) || !fs.lstatSync(workingDir).isDir
 const getDefaultApp = () => {
   const packageJsonFilePath = path.join(workingDir, 'package.json');
   if (fs.existsSync(packageJsonFilePath)) {
-    const package = JSON.parse(fs.readFileSync(packageJsonFilePath, 'utf8'));
+    const pack = JSON.parse(fs.readFileSync(packageJsonFilePath, 'utf8'));
     return {
       id: appId,
-      name: package.name,
-      version: package.version,
+      name: pack.name,
+      version: pack.version,
       versionTagPrefix
     };
   }
@@ -63,15 +70,15 @@ const execGetExitCode = async (command, cwd) => new Promise(resolve =>
     resolve(error ? error.code : 0);
   }));
 
-async function getGitInfo(dirPath, versionTagPrefix) {
+async function getGitInfo(dirPath, describeMatchPrefix) {
   const repository = await execGetOutput('git config --get remote.origin.url', dirPath);
   const branch = await execGetOutput('git rev-parse --abbrev-ref HEAD', dirPath);
   const sha1 = await execGetOutput('git rev-parse HEAD', dirPath);
   const dateUnix = await execGetOutput('git --no-pager log --pretty=format:"%at" -n1', dirPath);
   const diffExitCode = await execGetExitCode('git diff-index --quiet HEAD --', dirPath);
 
-  const version = versionTagPrefix && versionTagPrefix.length > 0
-    ? await execGetOutput(`git describe --tags --match "${versionTagPrefix}" HEAD`, dirPath)
+  const version = describeMatchPrefix && describeMatchPrefix.length > 0
+    ? await execGetOutput(`git describe --tags --match "${describeMatchPrefix}" HEAD`, dirPath)
     : undefined;
 
   return {
