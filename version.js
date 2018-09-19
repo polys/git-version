@@ -12,6 +12,7 @@ commander
   .option('--app-id [id]', 'override default application id', 'app')
   .option('--version-tag-prefix [prefix]', 'override default version tag prefix', 'v[0-9]*')
   .option('--no-pretty', 'disable pretty printing the output JSON')
+  .option('--version-only', 'return only the version without git information')
   .parse(process.argv);
 
 const {
@@ -20,7 +21,8 @@ const {
   configFile,
   appId,
   versionTagPrefix,
-  pretty
+  pretty,
+  versionOnly
 } = commander;
 
 if (!workingDir || !fs.existsSync(workingDir) || !fs.lstatSync(workingDir).isDirectory()) {
@@ -103,12 +105,17 @@ Promise.all(config.map(async item => (
   const app = versions.find(c => c.id === appId);
   const components = versions.filter(c => c.id !== appId);
 
-  const version = {
+  let version = {
     name: app.name,
-    version: app.version || appConfig.version,
-    git: app.git,
-    components
+    version: app.version || appConfig.version
   };
+
+  if (!versionOnly) {
+    version = Object.assign(version, {
+      git: app.git,
+      components
+    });
+  }
 
   const json = JSON.stringify(version, undefined, pretty ? 2 : 0);
 

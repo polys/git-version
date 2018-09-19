@@ -52,6 +52,14 @@ Otherwise, the name of the current folder is used as the `name` and `version` is
 }
 ```
 
+or with `--version-only`:
+```json
+{
+  "name": "get-git-version",
+  "version": "0.1.4"
+}
+```
+
 ## Command-line Options
 
 * `-w [path]` or `--working-dir [path]` overrides the working directory (defaults to the current directory)
@@ -60,6 +68,7 @@ Otherwise, the name of the current folder is used as the `name` and `version` is
 * `--app-id [id]` overrides the application `id` (defaults to `app`)
 * `--version-tag-prefix [prefix]` overrides the default version tag prefix (defaults to `v[0-9]*`)
 * `--no-pretty` disables pretty printing the output JSON
+* `--version-only` returns only the version, without git information
 * `-h` or `--help` outputs usage information
 
 ## Configuration file example
