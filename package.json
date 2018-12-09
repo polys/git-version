@@ -1,6 +1,6 @@
 {
   "name": "get-git-version",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Polys Georgiou",
   "license": "MIT",
   "homepage": "https://github.com/polys/git-version",
@@ -20,13 +20,13 @@
     "node": ">= 8.3.0"
   },
   "devDependencies": {
-    "eslint": "^5.6.0",
+    "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "nodemon": "^1.18.4"
+    "nodemon": "^1.18.7"
   },
   "dependencies": {
-    "commander": "^2.18.0"
+    "commander": "^2.19.0"
   },
   "description": "Gets Git version and commit information for one or more repositories.",
   "keywords": [
