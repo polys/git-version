@@ -14,16 +14,17 @@
   "main": "version.js",
   "scripts": {
     "start": "node version.js",
-    "debug": "nodemon version.js"
+    "debug": "nodemon version.js",
+    "eslint": "eslint version.js"
   },
   "engines": {
     "node": ">= 8.3.0"
   },
   "devDependencies": {
-    "eslint": "^6.2.2",
-    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint": "^6.3.0",
+    "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.2"
   },
   "dependencies": {
     "commander": "^2.20.0"
