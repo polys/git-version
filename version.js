@@ -11,6 +11,7 @@ commander
   .option('-c, --config-file [path]', 'override default config file name', '.git-version.config.json')
   .option('--app-id [id]', 'override default application id', 'app')
   .option('--version-tag-prefix [prefix]', 'override default version tag prefix', 'v[0-9]*')
+  .option('--no-repository', 'omit repository from the output JSON')
   .option('--no-pretty', 'disable pretty printing the output JSON')
   .option('--version-only', 'return only the version without git information')
   .parse(process.argv);
@@ -22,6 +23,7 @@ const {
   appId,
   versionTagPrefix,
   pretty,
+  repository,
   versionOnly
 } = commander;
 
@@ -73,7 +75,7 @@ const execGetExitCode = async (command, cwd) => new Promise(resolve =>
   }));
 
 async function getGitInfo(dirPath, describeMatchPrefix) {
-  const repository = await execGetOutput('git config --get remote.origin.url', dirPath);
+  const remoteUrl = repository ? await execGetOutput('git config --get remote.origin.url', dirPath) : undefined;
   const branch = await execGetOutput('git rev-parse --abbrev-ref HEAD', dirPath);
   const sha1 = await execGetOutput('git rev-parse HEAD', dirPath);
   const dateUnix = await execGetOutput('git --no-pager log --pretty=format:"%at" -n1', dirPath);
@@ -86,7 +88,7 @@ async function getGitInfo(dirPath, describeMatchPrefix) {
   return {
     version,
     git: {
-      repository,
+      repository: remoteUrl,
       branch,
       sha1,
       date: dateUnix ? new Date(1000 * dateUnix) : undefined,
