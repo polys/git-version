@@ -115,7 +115,7 @@ Promise.all(config.map(async item => (
   if (!versionOnly) {
     version = Object.assign(version, {
       git: app.git,
-      components
+      components: components.length ? components : undefined
     });
   }
 
