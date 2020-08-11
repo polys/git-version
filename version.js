@@ -55,7 +55,6 @@ const config = fs.existsSync(configFilePath)
   ? JSON.parse(fs.readFileSync(configFilePath, 'utf8'))
   : [getDefaultApp()];
 
-
 const outFilePath = outFile ? path.join(workingDir, outFile) : null;
 
 const appConfig = config.find(c => c.id === appId);
