@@ -63,15 +63,17 @@ if (!appConfig) {
   process.exit(1);
 }
 
-const execGetOutput = async (command, cwd) => new Promise(resolve =>
+const execGetOutput = async (command, cwd) => new Promise(resolve => {
   exec(command, { cwd }, (error, stdout) => {
     resolve(error ? null : (stdout || '').trim());
-  }));
+  });
+});
 
-const execGetExitCode = async (command, cwd) => new Promise(resolve =>
+const execGetExitCode = async (command, cwd) => new Promise(resolve => {
   exec(command, { cwd }, (error) => {
     resolve(error ? error.code : 0);
-  }));
+  });
+});
 
 async function getGitInfo(dirPath, describeMatchPrefix) {
   const remoteUrl = repository ? await execGetOutput('git config --get remote.origin.url', dirPath) : undefined;
