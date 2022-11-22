@@ -6,16 +6,17 @@
 Gets Git version and commit information for one or more repositories. This is useful for applications that span multiple repositories or use submodules.
 
 ## Prerequisites
+
 [Git](https://git-scm.com/) is expected to be preinstalled (and in `PATH`).
 
 The script simply runs shell commands similar to:
 
-  - repository: `git config --get remote.origin.url`
-  - branch: `git rev-parse --abbrev-ref HEAD`
-  - sha1: `git rev-parse HEAD`
-  - date: `git --no-pager log --pretty=format:"%at" -n1`
-  - clean: `git diff-index --quiet HEAD --`
-  - version: `git describe --tags --match "v[0-9]*" HEAD`
+- repository: `git config --get remote.origin.url`
+- branch: `git rev-parse --abbrev-ref HEAD`
+- sha1: `git rev-parse HEAD`
+- date: `git --no-pager log --pretty=format:"%at" -n1`
+- clean: `git diff-index --quiet HEAD --`
+- version: `git describe --tags --match "v[0-9]*" HEAD`
 
 ## Install
 
@@ -53,6 +54,7 @@ Otherwise, the name of the current folder is used as the `name` and `version` is
 ```
 
 or with `--version-only`:
+
 ```json
 {
   "name": "get-git-version",
@@ -62,14 +64,14 @@ or with `--version-only`:
 
 ## Command-line Options
 
-* `-w [path]` or `--working-dir [path]` overrides the working directory (defaults to the current directory)
-* `-o [path]` or `--out-file [path]` writes the output to a file instead of `stdout`
-* `-c [path]` or `--config-file [path]` overrides the config file name (defaults to `.git-version.config.json`)
-* `--app-id [id]` overrides the application `id` (defaults to `app`)
-* `--version-tag-prefix [prefix]` overrides the default version tag prefix (defaults to `v[0-9]*`)
-* `--no-pretty` disables pretty printing the output JSON
-* `--version-only` returns only the version, without git information
-* `-h` or `--help` outputs usage information
+- `-w [path]` or `--working-dir [path]` overrides the working directory (defaults to the current directory)
+- `-o [path]` or `--out-file [path]` writes the output to a file instead of `stdout`
+- `-c [path]` or `--config-file [path]` overrides the config file name (defaults to `.git-version.config.json`)
+- `--app-id [id]` overrides the application `id` (defaults to `app`)
+- `--version-tag-prefix [prefix]` overrides the default version tag prefix (defaults to `v[0-9]*`)
+- `--no-pretty` disables pretty printing the output JSON
+- `--version-only` returns only the version, without git information
+- `-h` or `--help` outputs usage information
 
 ## Configuration file example
 

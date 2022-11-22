@@ -17,14 +17,7 @@ commander
   .parse(process.argv);
 
 const {
-  workingDir,
-  outFile,
-  configFile,
-  appId,
-  versionTagPrefix,
-  pretty,
-  repository,
-  versionOnly
+  workingDir, outFile, configFile, appId, versionTagPrefix, pretty, repository, versionOnly
 } = commander;
 
 if (!workingDir || !fs.existsSync(workingDir) || !fs.lstatSync(workingDir).isDirectory()) {
@@ -40,40 +33,40 @@ const getDefaultApp = () => {
       id: appId,
       name: pack.name,
       version: pack.version,
-      versionTagPrefix
+      versionTagPrefix,
     };
   }
   return {
     id: appId,
     name: path.basename(workingDir),
-    versionTagPrefix
+    versionTagPrefix,
   };
 };
 
 const configFilePath = path.join(workingDir, configFile);
-const config = fs.existsSync(configFilePath)
-  ? JSON.parse(fs.readFileSync(configFilePath, 'utf8'))
-  : [getDefaultApp()];
+const config = fs.existsSync(configFilePath) ? JSON.parse(fs.readFileSync(configFilePath, 'utf8')) : [getDefaultApp()];
 
 const outFilePath = outFile ? path.join(workingDir, outFile) : null;
 
-const appConfig = config.find(c => c.id === appId);
+const appConfig = config.find((c) => c.id === appId);
 if (!appConfig) {
   console.error(`Expected an item with id '${appId}' in '${configFilePath}'`);
   process.exit(1);
 }
 
-const execGetOutput = async (command, cwd) => new Promise(resolve => {
-  exec(command, { cwd }, (error, stdout) => {
-    resolve(error ? null : (stdout || '').trim());
+const execGetOutput = async (command, cwd) =>
+  new Promise((resolve) => {
+    exec(command, { cwd }, (error, stdout) => {
+      resolve(error ? null : (stdout || '').trim());
+    });
   });
-});
 
-const execGetExitCode = async (command, cwd) => new Promise(resolve => {
-  exec(command, { cwd }, (error) => {
-    resolve(error ? error.code : 0);
+const execGetExitCode = async (command, cwd) =>
+  new Promise((resolve) => {
+    exec(command, { cwd }, (error) => {
+      resolve(error ? error.code : 0);
+    });
   });
-});
 
 async function getGitInfo(dirPath, describeMatchPrefix) {
   const remoteUrl = repository ? await execGetOutput('git config --get remote.origin.url', dirPath) : undefined;
@@ -93,30 +86,30 @@ async function getGitInfo(dirPath, describeMatchPrefix) {
       branch,
       sha1,
       date: dateUnix ? new Date(1000 * dateUnix) : undefined,
-      clean: (diffExitCode === 0)
-    }
+      clean: diffExitCode === 0,
+    },
   };
 }
 
-Promise.all(config.map(async item => (
-  {
+Promise.all(
+  config.map(async (item) => ({
     id: item.id,
     name: item.name,
-    ...await getGitInfo(path.join(workingDir, item.path || '.'), item.versionTagPrefix),
-  }
-))).then((versions) => {
-  const app = versions.find(c => c.id === appId);
-  const components = versions.filter(c => c.id !== appId);
+    ...(await getGitInfo(path.join(workingDir, item.path || '.'), item.versionTagPrefix)),
+  }))
+).then((versions) => {
+  const app = versions.find((c) => c.id === appId);
+  const components = versions.filter((c) => c.id !== appId);
 
   let version = {
     name: app.name,
-    version: app.version || appConfig.version
+    version: app.version || appConfig.version,
   };
 
   if (!versionOnly) {
     version = Object.assign(version, {
       git: app.git,
-      components: components.length ? components : undefined
+      components: components.length ? components : undefined,
     });
   }
 
@@ -124,7 +117,9 @@ Promise.all(config.map(async item => (
 
   if (outFilePath) {
     fs.writeFile(outFilePath, json, (err) => {
-      if (err) { console.error(err); }
+      if (err) {
+        console.error(err);
+      }
     });
   } else {
     console.log(json);
