@@ -1,6 +1,6 @@
 {
   "name": "get-git-version",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "author": "Polys Georgiou",
   "license": "MIT",
   "homepage": "https://github.com/polys/git-version",
@@ -15,15 +15,15 @@
   "scripts": {
     "start": "node version.js",
     "debug": "nodemon version.js",
-    "eslint": "eslint version.js"
+    "lint": "eslint version.js"
   },
   "engines": {
     "node": ">= 8.3.0"
   },
   "devDependencies": {
-    "eslint": "^8.57.1",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.32.0",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.0",
+    "globals": "^17.4.0",
     "nodemon": "^3.1.14"
   },
   "dependencies": {
